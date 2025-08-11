@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 
-const app = new Hono<{ Bindings: CloudflareBindings }>();
+const app = new Hono<{ Bindings: Env }>();
 
 app.get("/message", (c) => {
   return c.text("Ethan is very gay");
