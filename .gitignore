@@ -16,7 +16,6 @@ node_modules/
 .wrangler
 
 # env
-.env
 .env.production
 .dev.vars
 
@@ -34,5 +33,4 @@ lerna-debug.log*
 
 .dev.vars*
 !.dev.vars.example
-.env*
 !.env.example
