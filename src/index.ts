@@ -8,9 +8,10 @@ app.get("/message", (c) => {
   let msg = "Ethan is super duper very exceptionally gay"
   let msgHash = hashString(msg)
   let msgHashSalt = hashStringWithSalt(msg, salt)
-  return c.text(msg + " = "+ msgHash + " Are they really equal? :"+ 
+
+  return c.text(msg + " = "+ msgHash + " Are they really equal: "+ 
     (compareHash(msg, msgHash)? "YES" : "NO")+
-    " hashed with salt = " + msgHashSalt + (compareHashWithSalt(msg, salt, msgHashSalt)? " YES" : " NO")
+    " hashed with salt compare = " + (compareHashWithSalt(msg, salt, msgHashSalt)? "YES" : "NO")
   );
   // return c.text("Ethan is super duper very exceptionally gay");
 });
