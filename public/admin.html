@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: #fff;
+      min-height: 4000px;
+      animation: bgmove 20s linear infinite alternate;
+    }
+    @keyframes bgmove {
+      0% { background-position: 0 0; }
+      100% { background-position: 100vw 100vh; }
+    }
+    header {
+      background: rgba(0,0,0,0.7);
+      padding: 2rem 0;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-size: 3rem;
+      letter-spacing: 0.2em;
+      margin: 0;
+      color: #ffeb3b;
+      text-shadow: 2px 2px 8px #000;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { color: #ffeb3b; }
+      100% { color: #00e5ff; }
+    }
+    nav {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      background: #00e5ff;
+      padding: 0.7rem 2rem;
+      margin: 0 1rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #0006;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+    nav a:hover {
+      background: #ffeb3b;
+      color: #222;
+      transform: scale(1.1);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      background: rgba(255,255,255,0.07);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px #0005;
+      padding: 3rem;
+      min-height: 2000px;
+    }
+    section {
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #00e5ff44;
+    }
+    section:last-child {
+      border-bottom: none;
+    }
+    h2 {
+      font-size: 2.5rem;
+      color: #ffeb3b;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 6px #000;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: linear-gradient(120deg, #00e5ff99 0%, #ffeb3b99 100%);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px #0003;
+      padding: 2rem;
+      color: #222;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 8px 32px #0005;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      filter: blur(10px);
+      z-index: 0;
+    }
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+    .table-section {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff2;
+      color: #fff;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+    }
+    th, td {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #00e5ff44;
+      text-align: left;
+    }
+    th {
+      background: #00e5ffcc;
+      color: #222;
+      font-size: 1.2rem;
+    }
+    tr:hover {
+      background: #ffeb3b33;
+      color: #222;
+    }
+    .footer {
+      text-align: center;
+      padding: 3rem 0 1rem 0;
+      color: #fff9;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+      background: linear-gradient(90deg, #00e5ff44 0%, #ffeb3b44 100%);
+      border-radius: 0 0 20px 20px;
+      margin-top: 4rem;
+    }
+    .rainbow {
+      background: linear-gradient(90deg, #ff0080, #7928ca, #007cf0, #00e5ff, #ffeb3b, #ff0080);
+      background-size: 200% 200%;
+      animation: rainbow 5s linear infinite alternate;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      font-weight: bold;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .button {
+      background: #ffeb3b;
+      color: #222;
+      border: none;
+      border-radius: 30px;
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 2rem 0;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0004;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+    .button:hover {
+      background: #00e5ff;
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      border-radius: 10px;
+      background: #2228;
+      margin: 2rem 0;
+      padding: 1rem 0;
+    }
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 20s linear infinite;
+      font-size: 1.5rem;
+      color: #ffeb3b;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+    }
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+    .spacer {
+      height: 200px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-title i {
+      font-size: 2rem;
+      color: #00e5ff;
+      filter: drop-shadow(0 0 6px #00e5ff88);
+    }
+    .glow {
+      text-shadow: 0 0 8px #00e5ff, 0 0 16px #ffeb3b;
+    }
+    .admin-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #ffeb3b;
+      box-shadow: 0 0 24px #00e5ff99;
+      margin-bottom: 1rem;
+      object-fit: cover;
+      background: #fff;
+    }
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #00e5ff33;
+      border-radius: 16px;
+      padding: 2rem 3rem;
+      font-size: 2rem;
+      color: #ffeb3b;
+      font-weight: bold;
+      box-shadow: 0 2px 12px #0003;
+      flex: 1 1 200px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .stat span {
+      display: block;
+      font-size: 1.2rem;
+      color: #fff;
+      font-weight: normal;
+      margin-top: 0.5rem;
+    }
+    .long-list {
+      columns: 3 300px;
+      column-gap: 2rem;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+    }
+    .long-list li {
+      margin-bottom: 0.7rem;
+      background: #fff2;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px #0002;
+      color: #fff;
+      list-style: square inside;
+    }
+    @media (max-width: 800px) {
+      .container { padding: 1rem; }
+      .stats { flex-direction: column; }
+      .card-grid { grid-template-columns: 1fr; }
+      .long-list { columns: 1 200px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="rainbow glow">Admin Dashboard</h1>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#users">Users</a>
+      <a href="#logs">Logs</a>
+      <a href="#settings">Settings</a>
+    </nav>
+  </header>
+  <div class="marquee"><span>Welcome to the Admin Dashboard! &nbsp; | &nbsp; Manage users, view logs, and customize settings with style! &nbsp; | &nbsp; Enjoy the rainbow! &nbsp; | &nbsp; </span></div>
+  <div class="container">
+    <section id="overview">
+      <div class="section-title"><i>🏆</i><h2>Overview</h2></div>
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin Avatar" class="admin-avatar">
+      <div class="stats">
+        <div class="stat">1,234<span>Active Users</span></div>
+        <div class="stat">98%<span>Uptime</span></div>
+        <div class="stat">42<span>Pending Tasks</span></div>
+        <div class="stat">$12,345<span>Revenue</span></div>
+      </div>
+      <button class="button" onclick="alert('You clicked the big admin button!')">Big Admin Button</button>
+    </section>
+    <section id="users">
+      <div class="section-title"><i>👥</i><h2>Users</h2></div>
+      <div class="card-grid">
+        <div class="card"><div class="card-content">User: <b>Alice</b><br>Status: <span style="color:#00e5ff">Active</span></div></div>
+        <div class="card"><div class="card-content">User: <b>Bob</b><br>Status: <span style="color:#ffeb3b">Pending</span></div></div>
+        <div class="card"><div class="card-content">User: <b>Charlie</b><br>Status: <span style="color:#00e5ff">Active</span></div></div>
+        <div class="card"><div class="card-content">User: <b>Dana</b><br>Status: <span style="color:#f44336">Banned</span></div></div>
+      </div>
+      <ul class="long-list">
+        <li>User: Eve - Active</li>
+        <li>User: Frank - Pending</li>
+        <li>User: Grace - Active</li>
+        <li>User: Heidi - Active</li>
+        <li>User: Ivan - Banned</li>
+        <li>User: Judy - Active</li>
+        <li>User: Mallory - Pending</li>
+        <li>User: Oscar - Active</li>
+        <li>User: Peggy - Active</li>
+        <li>User: Sybil - Active</li>
+        <li>User: Trent - Active</li>
+        <li>User: Victor - Pending</li>
+        <li>User: Walter - Active</li>
+        <li>User: Xavier - Active</li>
+        <li>User: Yolanda - Active</li>
+        <li>User: Zach - Active</li>
+        <li>User: Zoe - Active</li>
+        <li>User: Quentin - Active</li>
+        <li>User: Rupert - Active</li>
+        <li>User: Steve - Active</li>
+        <li>User: Tina - Active</li>
+        <li>User: Uma - Active</li>
+        <li>User: Vince - Active</li>
+        <li>User: Wendy - Active</li>
+        <li>User: Xena - Active</li>
+        <li>User: Yasmine - Active</li>
+        <li>User: Zack - Active</li>
+        <li>User: Aaron - Active</li>
+        <li>User: Beth - Active</li>
+        <li>User: Carl - Active</li>
+        <li>User: Denise - Active</li>
+        <li>User: Ethan - Active</li>
+        <li>User: Fiona - Active</li>
+        <li>User: George - Active</li>
+        <li>User: Hannah - Active</li>
+        <li>User: Ingrid - Active</li>
+        <li>User: Jack - Active</li>
+        <li>User: Karen - Active</li>
+        <li>User: Larry - Active</li>
+        <li>User: Monica - Active</li>
+        <li>User: Nate - Active</li>
+        <li>User: Olivia - Active</li>
+        <li>User: Paul - Active</li>
+        <li>User: Quinn - Active</li>
+        <li>User: Rachel - Active</li>
+        <li>User: Sam - Active</li>
+        <li>User: Tom - Active</li>
+        <li>User: Ursula - Active</li>
+        <li>User: Vera - Active</li>
+        <li>User: Will - Active</li>
+        <li>User: Xander - Active</li>
+        <li>User: Yolanda - Active</li>
+        <li>User: Zane - Active</li>
+      </ul>
+    </section>
+    <section id="logs">
+      <div class="section-title"><i>📜</i><h2>Logs</h2></div>
+      <div class="table-section">
+        <table>
+          <thead>
+            <tr><th>Time</th><th>User</th><th>Action</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2025-08-11 10:00</td><td>Alice</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:05</td><td>Bob</td><td>Change Password</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:10</td><td>Charlie</td><td>Failed Login</td><td>Failed</td></tr>
+            <tr><td>2025-08-11 10:15</td><td>Dana</td><td>Logout</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:20</td><td>Eve</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:25</td><td>Frank</td><td>Delete User</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:30</td><td>Grace</td><td>Update Profile</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:35</td><td>Heidi</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:40</td><td>Ivan</td><td>Failed Login</td><td>Failed</td></tr>
+            <tr><td>2025-08-11 10:45</td><td>Judy</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:50</td><td>Mallory</td><td>Ban User</td><td>Success</td></tr>
+            <tr><td>2025-08-11 10:55</td><td>Oscar</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 11:00</td><td>Peggy</td><td>Change Email</td><td>Success</td></tr>
+            <tr><td>2025-08-11 11:05</td><td>Sybil</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 11:10</td><td>Trent</td><td>Failed Login</td><td>Failed</td></tr>
+            <tr><td>2025-08-11 11:15</td><td>Victor</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 11:20</td><td>Walter</td><td>Login</td><td>Success</td></tr>
+            <tr><td>2025-08-11 11:25</td><td>Xavier</td><td>Update Profile</td><td>Success</td></tr>
+            <tr><td>2025-08-11 11:30</td><td>Yolanda</td><td>Login</td><td>Success</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id="settings">
+      <div class="section-title"><i>⚙️</i><h2>Settings</h2></div>
+      <form onsubmit="event.preventDefault();alert('Settings saved!');" style="max-width:600px;margin:auto;">
+        <label style="display:block;margin:1.5rem 0 0.5rem 0;font-weight:bold;">Theme:</label>
+        <select style="width:100%;padding:0.7rem 1rem;border-radius:8px;font-size:1.1rem;">
+          <option>Dark</option>
+          <option>Light</option>
+          <option>Rainbow</option>
+        </select>
+        <label style="display:block;margin:1.5rem 0 0.5rem 0;font-weight:bold;">Notifications:</label>
+        <input type="checkbox" checked> Email Alerts<br>
+        <input type="checkbox"> SMS Alerts<br>
+        <input type="checkbox" checked> Push Notifications<br>
+        <label style="display:block;margin:1.5rem 0 0.5rem 0;font-weight:bold;">Admin Message:</label>
+        <textarea style="width:100%;min-height:100px;border-radius:8px;font-size:1.1rem;">Welcome to the admin dashboard!</textarea>
+        <button class="button" type="submit">Save Settings</button>
+      </form>
+    </section>
+    <div class="spacer"></div>
+    <section>
+      <div class="section-title"><i>🌈</i><h2>Just for Fun</h2></div>
+      <p class="rainbow" style="font-size:2rem;text-align:center;">This page is way too long and way too styled. Enjoy scrolling!</p>
+      <div style="height:600px;"></div>
+      <p style="text-align:center;font-size:1.5rem;">You made it to the bottom! 🎉</p>
+    </section>
+  </div>
+  <footer class="footer">&copy; 2025 Admin Dashboard &mdash; All rights reserved.</footer>
+</body>
+</html>
