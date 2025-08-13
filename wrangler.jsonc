@@ -13,7 +13,8 @@
     {
       "binding": "DB",
       "database_name": "sen-ctf",
-      "database_id": "feb45d5a-0296-4b8f-a6ec-c9c5b532a3b8"
+      "database_id": "feb45d5a-0296-4b8f-a6ec-c9c5b532a3b8",
+      "migrations_dir": "./drizzle"
     }
   ]
 }
