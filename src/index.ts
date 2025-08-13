@@ -32,7 +32,6 @@ app.get("/debug/jwt-details", async (c) => {
       decodedPayload: decoded.payload,
       decodedHeader: decoded.header,
       jwtSecret: JWT_SECRET, // vulnerability: exposes signing key
-      sampleForgedAdminToken: await sign({ username: "admin" }, JWT_SECRET),
     },
     HttpStatusCodes.OK
   );
