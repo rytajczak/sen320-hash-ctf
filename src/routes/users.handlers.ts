@@ -13,7 +13,7 @@ import { sign, verify } from "hono/jwt";
 import { generateSalt, hashPassword } from "../util/crypto";
 
 // Vulnerability: non secure jwt secret
-const jwtSecret = "ethanisgaylmao";
+export const JWT_SECRET = "rgunavftnlyznb";
 
 export const register: AppRouteHandler<RegisterRoute> = async (c) => {
   const { username, password } = c.req.valid("json");
@@ -69,7 +69,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
     return c.json({ error: "Incorrect password" }, HttpStatusCodes.FORBIDDEN);
   }
 
-  const token = await sign({ username }, jwtSecret);
+  const token = await sign({ username }, JWT_SECRET);
 
   return c.json(
     {
@@ -96,7 +96,7 @@ export const passwordResetRequest: AppRouteHandler<
   const token = authHeader.replace("Bearer ", "").trim();
   let decoded: any;
   try {
-    decoded = await verify(token, jwtSecret);
+    decoded = await verify(token, JWT_SECRET);
   } catch {
     return c.json(
       { error: "Invalid Bearer token" },
@@ -143,7 +143,7 @@ export const passwordResetConfirm: AppRouteHandler<
   const token = authHeader.replace("Bearer ", "").trim();
   let decoded: any;
   try {
-    decoded = await verify(token, jwtSecret);
+    decoded = await verify(token, JWT_SECRET);
   } catch {
     return c.json(
       { error: "Invalid Bearer token" },

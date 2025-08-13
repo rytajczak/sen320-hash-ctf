@@ -3,16 +3,40 @@ import { notFound, onError } from "stoker/middlewares";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import defaultHook from "stoker/openapi/default-hook";
 import users from "./routes/users.index";
+import * as HttpStatusCodes from "stoker/http-status-codes";
+import { JWT_SECRET } from "./routes/users.handlers";
+import { decode, sign } from "hono/jwt";
 
 const app = new OpenAPIHono<{ Bindings: Env }>({ strict: false, defaultHook });
 app.notFound(notFound);
 app.onError(onError);
 
-app.get("/message", (c) => {
-  return c.text("Ethan is super duper extraordinarily very exceptionally gay");
-});
-
 app.route("/", users);
+
+// vulnerabilty: literally everything in this endpoint shouldn't be in prod
+app.get("/debug/jwt-details", async (c) => {
+  const authHeader = c.req.header("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return c.json(
+      { error: "Missing or invalid Bearer token" },
+      HttpStatusCodes.UNAUTHORIZED
+    );
+  }
+  const token = authHeader.replace("Bearer ", "").trim();
+  const decoded = decode(token);
+
+  return c.json(
+    {
+      message: "Debug JWT details (do not expose in production!)",
+      providedToken: token,
+      decodedPayload: decoded.payload,
+      decodedHeader: decoded.header,
+      jwtSecret: JWT_SECRET, // vulnerability: exposes signing key
+      sampleForgedAdminToken: await sign({ username: "admin" }, JWT_SECRET),
+    },
+    HttpStatusCodes.OK
+  );
+});
 
 app.doc("/doc", {
   openapi: "3.0.0",
