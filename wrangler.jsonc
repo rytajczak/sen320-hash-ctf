@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sen320-hash-ctf",
   "main": "src/index.ts",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "compatibility_date": "2025-08-07",
   "observability": {
     "enabled": true
