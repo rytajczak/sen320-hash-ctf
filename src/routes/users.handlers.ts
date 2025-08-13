@@ -9,36 +9,18 @@ import { drizzle } from "drizzle-orm/d1";
 import { users } from "../db/schema";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { eq } from "drizzle-orm";
-import crypto from "node:crypto";
 import { sign, verify } from "hono/jwt";
+import { generateSalt, hashPassword } from "../util/crypto";
 
-const weakPepper = "pepper123";
-const jwtSecret = "supersecret";
-
-// Vulnerability: reused salt
-function generateSaltFromFirstLetter(username: string) {
-  const firstLetter = username[0].toLowerCase();
-  return crypto
-    .createHash("md5")
-    .update(firstLetter)
-    .digest("hex")
-    .slice(0, 16);
-}
-
-// Vulnerability: md5 hashing
-function md5Hash(password: string, salt: string) {
-  return crypto
-    .createHash("md5")
-    .update(password + salt + weakPepper)
-    .digest("hex");
-}
+// Vulnerability: non secure jwt secret
+const jwtSecret = "ethanisgaylmao";
 
 export const register: AppRouteHandler<RegisterRoute> = async (c) => {
   const { username, password } = c.req.valid("json");
   const db = drizzle(c.env.DB);
 
-  const salt = generateSaltFromFirstLetter(username);
-  const passwordHash = md5Hash(password, salt);
+  const salt = generateSalt(username);
+  const passwordHash = hashPassword(password, salt);
 
   const user = await db
     .insert(users)
@@ -80,8 +62,8 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
     return c.json({ error: "User not found" }, HttpStatusCodes.NOT_FOUND);
   }
 
-  const salt = generateSaltFromFirstLetter(username);
-  const passwordHash = md5Hash(password, salt);
+  const salt = generateSalt(username);
+  const passwordHash = hashPassword(password, salt);
 
   if (user.passwordHash !== passwordHash) {
     return c.json({ error: "Incorrect password" }, HttpStatusCodes.FORBIDDEN);
@@ -180,8 +162,8 @@ export const passwordResetConfirm: AppRouteHandler<
   }
 
   const db = drizzle(c.env.DB);
-  const salt = generateSaltFromFirstLetter(username);
-  const newPasswordHash = md5Hash(newPassword, salt);
+  const salt = generateSalt(username);
+  const newPasswordHash = hashPassword(newPassword, salt);
 
   await db
     .update(users)
