@@ -20,6 +20,7 @@ export const authSchema = z.object({
 export const register = createRoute({
   path: "/register",
   method: "post",
+  description: "Register a new user",
   request: {
     body: jsonContentRequired(authSchema, "User details"),
   },
@@ -45,6 +46,7 @@ export const register = createRoute({
 export const login = createRoute({
   path: "/login",
   method: "post",
+  description: "Login a user",
   request: {
     body: jsonContentRequired(authSchema, "User details"),
   },
@@ -76,6 +78,7 @@ export const login = createRoute({
 export const passwordResetRequest = createRoute({
   path: "/password-reset/request",
   method: "post",
+  description: "Request a password reset",
   request: {
     headers: z.object({
       authorization: z.string().describe("Bearer token from /login").openapi({
@@ -109,6 +112,7 @@ export const passwordResetRequest = createRoute({
 export const passwordResetConfirm = createRoute({
   path: "/password-reset/confirm",
   method: "post",
+  description: "Confirm a password reset",
   request: {
     headers: z.object({
       authorization: z.string().describe("Bearer token from /login").openapi({
